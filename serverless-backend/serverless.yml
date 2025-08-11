@@ -1,0 +1,385 @@
+service: next-step-paws-api
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'prod'}
+  environment:
+    USERS_TABLE: ${self:service}-users-${self:provider.stage}
+    BOOKINGS_TABLE: ${self:service}-bookings-${self:provider.stage}
+    CLASSES_TABLE: ${self:service}-classes-${self:provider.stage}
+    SLOTS_TABLE: ${self:service}-slots-${self:provider.stage}
+    JWT_SECRET: ${env:JWT_SECRET, 'your-super-secret-jwt-key-change-in-production'}
+    FRONTEND_URL: ${env:FRONTEND_URL, 'https://main.d1234567890.amplifyapp.com'}
+  
+  # IAM permissions for Lambda functions
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
+        - dynamodb:DescribeTimeToLive
+        - dynamodb:ListTagsOfResource
+      Resource:
+        - Fn::GetAtt: [UsersTable, Arn]
+        - Fn::GetAtt: [BookingsTable, Arn]
+        - Fn::GetAtt: [ClassesTable, Arn]
+        - Fn::GetAtt: [SlotsTable, Arn]
+        - Fn::Join:
+          - '/'
+          - - Fn::GetAtt: [UsersTable, Arn]
+            - 'index/*'
+        - Fn::Join:
+          - '/'
+          - - Fn::GetAtt: [BookingsTable, Arn]
+            - 'index/*'
+        - Fn::Join:
+          - '/'
+          - - Fn::GetAtt: [ClassesTable, Arn]
+            - 'index/*'
+        - Fn::Join:
+          - '/'
+          - - Fn::GetAtt: [SlotsTable, Arn]
+            - 'index/*'
+
+functions:
+  # Health check
+  health:
+    handler: src/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+
+  # Authentication functions
+  login:
+    handler: src/auth.login
+    events:
+      - http:
+          path: /api/auth/login
+          method: post
+          cors: true
+
+  register:
+    handler: src/auth.register
+    events:
+      - http:
+          path: /api/auth/register
+          method: post
+          cors: true
+
+  # User management
+  getUsers:
+    handler: src/users.getUsers
+    events:
+      - http:
+          path: /api/users
+          method: get
+          cors: true
+
+  getUser:
+    handler: src/users.getUser
+    events:
+      - http:
+          path: /api/users/{id}
+          method: get
+          cors: true
+
+  updateUser:
+    handler: src/users.updateUser
+    events:
+      - http:
+          path: /api/users/{id}
+          method: put
+          cors: true
+
+  # Bookings management
+  getBookings:
+    handler: src/bookings.getBookings
+    events:
+      - http:
+          path: /api/bookings
+          method: get
+          cors: true
+
+  createBooking:
+    handler: src/bookings.createBooking
+    events:
+      - http:
+          path: /api/bookings
+          method: post
+          cors: true
+
+  updateBooking:
+    handler: src/bookings.updateBooking
+    events:
+      - http:
+          path: /api/bookings/{id}
+          method: put
+          cors: true
+
+  deleteBooking:
+    handler: src/bookings.deleteBooking
+    events:
+      - http:
+          path: /api/bookings/{id}
+          method: delete
+          cors: true
+
+  # Classes management
+  getClasses:
+    handler: src/classes.getClasses
+    events:
+      - http:
+          path: /api/classes
+          method: get
+          cors: true
+
+  createClass:
+    handler: src/classes.createClass
+    events:
+      - http:
+          path: /api/classes
+          method: post
+          cors: true
+
+  updateClass:
+    handler: src/classes.updateClass
+    events:
+      - http:
+          path: /api/classes/{id}
+          method: put
+          cors: true
+
+  enrollInClass:
+    handler: src/classes.enrollInClass
+    events:
+      - http:
+          path: /api/classes/{id}/enroll
+          method: post
+          cors: true
+
+  # Slots management
+  getSlots:
+    handler: src/slots.getSlots
+    events:
+      - http:
+          path: /api/slots
+          method: get
+          cors: true
+
+  createSlot:
+    handler: src/slots.createSlot
+    events:
+      - http:
+          path: /api/slots
+          method: post
+          cors: true
+
+  deleteSlot:
+    handler: src/slots.deleteSlot
+    events:
+      - http:
+          path: /api/slots/{id}
+          method: delete
+          cors: true
+
+# CloudFormation resources for DynamoDB tables
+resources:
+  Resources:
+    # Users table
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        BillingMode: PAY_PER_REQUEST  # Serverless pricing
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+          - AttributeName: role
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: EmailIndex
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: RoleIndex
+            KeySchema:
+              - AttributeName: role
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: false
+        Tags:
+          - Key: Environment
+            Value: ${self:provider.stage}
+          - Key: Service
+            Value: ${self:service}
+
+    # Bookings table
+    BookingsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.BOOKINGS_TABLE}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: slotId
+            AttributeType: S
+          - AttributeName: status
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: UserIndex
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: SlotIndex
+            KeySchema:
+              - AttributeName: slotId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: StatusIndex
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        Tags:
+          - Key: Environment
+            Value: ${self:provider.stage}
+          - Key: Service
+            Value: ${self:service}
+
+    # Classes table
+    ClassesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.CLASSES_TABLE}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: level
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: LevelIndex
+            KeySchema:
+              - AttributeName: level
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        Tags:
+          - Key: Environment
+            Value: ${self:provider.stage}
+          - Key: Service
+            Value: ${self:service}
+
+    # Available slots table
+    SlotsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.SLOTS_TABLE}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: date
+            AttributeType: S
+          - AttributeName: isBooked
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: DateIndex
+            KeySchema:
+              - AttributeName: date
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: BookingStatusIndex
+            KeySchema:
+              - AttributeName: isBooked
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        Tags:
+          - Key: Environment
+            Value: ${self:provider.stage}
+          - Key: Service
+            Value: ${self:service}
+
+  Outputs:
+    UsersTableName:
+      Value: !Ref UsersTable
+      Export:
+        Name: ${self:service}-${self:provider.stage}-UsersTableName
+
+    BookingsTableName:
+      Value: !Ref BookingsTable
+      Export:
+        Name: ${self:service}-${self:provider.stage}-BookingsTableName
+
+    ClassesTableName:
+      Value: !Ref ClassesTable
+      Export:
+        Name: ${self:service}-${self:provider.stage}-ClassesTableName
+
+    SlotsTableName:
+      Value: !Ref SlotsTable
+      Export:
+        Name: ${self:service}-${self:provider.stage}-SlotsTableName
+
+    ApiGatewayUrl:
+      Value:
+        Fn::Join:
+          - ''
+          - - 'https://'
+            - Ref: ApiGatewayRestApi
+            - '.execute-api.'
+            - ${self:provider.region}
+            - '.amazonaws.com/'
+            - ${self:provider.stage}
+      Export:
+        Name: ${self:service}-${self:provider.stage}-ApiGatewayUrl
+
+plugins:
+  - serverless-offline
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+package:
+  individually: true

@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 # Configuration
 STACK_NAME="elite-canine-academy"
 REGION="us-east-1"  # Required for CloudFront
-PROJECT_DIR="poodle-training"
+PROJECT_DIR="."
 
 echo -e "${BLUE}🐕 Elite Canine Academy - AWS Deployment Script${NC}"
 echo "=============================================="

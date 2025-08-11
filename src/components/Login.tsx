@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User } from '../types/auth';
+import { apiService } from '../services/apiService';
 import './Login.css';
 
 interface LoginProps {
@@ -14,78 +15,93 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [dogName, setDogName] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (loginType === 'owner') {
-      // Simple owner authentication (in real app, this would be secure)
-      if (email === 'owner@nextsteppaws.com' && password === 'paws123') {
-        onLogin({
-          id: 'owner-1',
-          email: email,
-          name: 'Next Step Paws Owner',
-          role: 'owner',
-          password: password
-        });
-      } else {
-        alert('Invalid owner credentials. Use: owner@nextsteppaws.com / paws123');
-      }
-    } else {
-      // Customer login/signup
-      if (isSignUp) {
-        if (!name || !email || !dogName || !password) {
-          alert('Please fill in all fields for signup!');
-          return;
-        }
-
-        if (password.length < 6) {
-          alert('Password must be at least 6 characters long!');
-          return;
-        }
-        
-        // Check if customer already exists
-        const customers = JSON.parse(localStorage.getItem('customers') || '[]');
-        const existingCustomer = customers.find((c: User) => c.email === email);
-        if (existingCustomer) {
-          alert('An account with this email already exists. Please sign in instead.');
-          return;
-        }
-        
-        // Create new customer account
-        const newUser: User = {
-          id: `customer-${Date.now()}`,
-          email,
-          name,
-          role: 'customer',
-          dogName,
-          password
-        };
-        
-        // Save to localStorage (in real app, this would be a proper backend)
-        customers.push(newUser);
-        localStorage.setItem('customers', JSON.stringify(customers));
-        
-        onLogin(newUser);
-      } else {
-        // Customer login
+    try {
+      if (loginType === 'owner') {
+        // Owner login via API
         if (!email || !password) {
           alert('Please enter your email and password!');
           return;
         }
         
-        const customers = JSON.parse(localStorage.getItem('customers') || '[]');
-        const customer = customers.find((c: User) => c.email === email);
+        const response = await apiService.login(email, password);
         
-        if (customer) {
-          if (customer.password === password) {
-            onLogin(customer);
-          } else {
-            alert('Incorrect password. Please try again.');
-          }
-        } else {
-          alert('Customer not found. Please sign up first!');
-          setIsSignUp(true);
+        if (response.user.role !== 'owner') {
+          alert('This account is not an owner account. Please use customer login.');
+          return;
         }
+        
+        onLogin({
+          id: response.user.id,
+          email: response.user.email,
+          name: response.user.name,
+          role: response.user.role,
+          dogName: response.user.dogName,
+          password: password // Keep for legacy compatibility
+        });
+      } else {
+        // Customer login/signup via API
+        if (isSignUp) {
+          if (!name || !email || !dogName || !password) {
+            alert('Please fill in all fields for signup!');
+            return;
+          }
+
+          if (password.length < 6) {
+            alert('Password must be at least 6 characters long!');
+            return;
+          }
+          
+          const response = await apiService.register({
+            email,
+            password,
+            name,
+            dogName
+          });
+          
+          onLogin({
+            id: response.user.id,
+            email: response.user.email,
+            name: response.user.name,
+            role: response.user.role,
+            dogName: response.user.dogName,
+            password: password // Keep for legacy compatibility
+          });
+        } else {
+          // Customer login via API
+          if (!email || !password) {
+            alert('Please enter your email and password!');
+            return;
+          }
+          
+          const response = await apiService.login(email, password);
+          
+          onLogin({
+            id: response.user.id,
+            email: response.user.email,
+            name: response.user.name,
+            role: response.user.role,
+            dogName: response.user.dogName,
+            password: password // Keep for legacy compatibility
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Login/signup error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      
+      if (errorMessage.includes('User already exists')) {
+        alert('An account with this email already exists. Please sign in instead.');
+        setIsSignUp(false);
+      } else if (errorMessage.includes('Invalid credentials')) {
+        alert('Invalid email or password. Please try again.');
+      } else if (errorMessage.includes('User not found') || errorMessage.includes('Unauthorized')) {
+        alert('Account not found. Please sign up first!');
+        setIsSignUp(true);
+      } else {
+        alert(`Error: ${errorMessage}`);
       }
     }
   };

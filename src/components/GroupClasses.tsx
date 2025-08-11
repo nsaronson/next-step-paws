@@ -1,128 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import './GroupClasses.css';
-import { GroupClass } from '../types/auth';
+import { apiService, GroupClass } from '../services/apiService';
 
 const GroupClasses: React.FC = () => {
   const [classes, setClasses] = useState<GroupClass[]>([]);
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [enrolling, setEnrolling] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedClasses = localStorage.getItem('groupClasses');
-    if (savedClasses) {
-      setClasses(JSON.parse(savedClasses));
-    } else {
-      const defaultClasses: GroupClass[] = [
-        {
-          id: '1',
-          name: 'Foundation Skills',
-          description: 'Perfect for dogs learning their first commands! Sit, stay, and building good habits.',
-          schedule: 'Tuesdays & Thursdays, 10:00 AM - 11:00 AM',
-          spots: 6,
-          maxSpots: 8,
-          price: 120,
-          level: 'Introductory skills',
-          enrolled: [],
-          waitlist: []
-        },
-        {
-          id: '2',
-          name: 'Puppy Foundations',
-          description: 'Socialization and basic training for puppies 8-16 weeks old.',
-          schedule: 'Saturdays, 2:00 PM - 3:30 PM',
-          spots: 4,
-          maxSpots: 6,
-          price: 180,
-          level: 'Puppy',
-          enrolled: [],
-          waitlist: []
-        },
-        {
-          id: '3',
-          name: 'Advanced Training',
-          description: 'Ongoing skills development for dogs ready to master complex behaviors.',
-          schedule: 'Wednesdays, 6:00 PM - 7:30 PM',
-          spots: 2,
-          maxSpots: 4,
-          price: 220,
-          level: 'Ongoing skills',
-          enrolled: [],
-          waitlist: []
-        }
-      ];
-      setClasses(defaultClasses);
-      localStorage.setItem('groupClasses', JSON.stringify(defaultClasses));
-    }
+    fetchClasses();
   }, []);
 
-  const handleEnroll = (classId: string) => {
+  const fetchClasses = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const fetchedClasses = await apiService.getClasses();
+      setClasses(fetchedClasses);
+    } catch (err) {
+      console.error('Failed to fetch classes:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load classes');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEnroll = async (classId: string) => {
     if (!clientName || !clientEmail) {
       alert('Please enter your name and email to enroll!');
       return;
     }
 
-    const studentInfo = `${clientName} (${clientEmail})`;
-    const updatedClasses = classes.map(cls => {
-      if (cls.id === classId) {
-        if (cls.spots > 0) {
-          const newEnrolled = [...cls.enrolled, studentInfo];
-          return {
-            ...cls,
-            spots: cls.spots - 1,
-            enrolled: newEnrolled
-          };
-        } else {
-          const newWaitlist = [...(cls.waitlist || []), studentInfo];
-          return {
-            ...cls,
-            waitlist: newWaitlist
-          };
-        }
-      }
-      return cls;
-    });
-
-    setClasses(updatedClasses);
-    localStorage.setItem('groupClasses', JSON.stringify(updatedClasses));
-    
-    const targetClass = classes.find(cls => cls.id === classId);
-    if (targetClass && targetClass.spots > 0) {
-      alert(`Successfully enrolled ${clientName} in the class! 🐩💖`);
-    } else {
-      alert(`Class is full. ${clientName} has been added to the waitlist! You'll be contacted when a spot opens. 🐩⏰`);
+    try {
+      setEnrolling(classId);
+      const response = await apiService.enrollInClass(classId);
+      
+      alert(response.message);
+      
+      // Refresh classes to get updated enrollment data
+      await fetchClasses();
+      
+      setClientName('');
+      setClientEmail('');
+    } catch (err) {
+      console.error('Failed to enroll in class:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to enroll in class';
+      alert(`Error: ${errorMessage}`);
+    } finally {
+      setEnrolling(null);
     }
-    
-    setClientName('');
-    setClientEmail('');
   };
 
-  const handleCancel = (classId: string, studentInfo: string) => {
-    const updatedClasses = classes.map(cls => {
-      if (cls.id === classId) {
-        const updatedEnrolled = cls.enrolled.filter(student => student !== studentInfo);
-        let updatedWaitlist = [...(cls.waitlist || [])];
-        let newSpots = cls.spots + 1;
 
-        if (updatedWaitlist.length > 0) {
-          const nextStudent = updatedWaitlist.shift();
-          updatedEnrolled.push(nextStudent!);
-          newSpots = cls.spots;
-          alert(`${nextStudent} has been automatically enrolled from the waitlist! 🐩✨`);
-        }
-
-        return {
-          ...cls,
-          enrolled: updatedEnrolled,
-          waitlist: updatedWaitlist,
-          spots: newSpots
-        };
-      }
-      return cls;
-    });
-
-    setClasses(updatedClasses);
-    localStorage.setItem('groupClasses', JSON.stringify(updatedClasses));
-  };
 
   const getLevelColor = (level: string) => {
     switch (level) {
@@ -132,6 +64,39 @@ const GroupClasses: React.FC = () => {
       default: return '#e91e63';
     }
   };
+
+  if (loading) {
+    return (
+      <div className="group-classes">
+        <div className="card">
+          <h2>🐩 Group Training Classes 🐩</h2>
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <p>Loading classes...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="group-classes">
+        <div className="card">
+          <h2>🐩 Group Training Classes 🐩</h2>
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <p style={{ color: '#f44336' }}>Error: {error}</p>
+            <button 
+              className="btn" 
+              onClick={fetchClasses}
+              style={{ marginTop: '1rem' }}
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="group-classes">
@@ -180,8 +145,8 @@ const GroupClasses: React.FC = () => {
                 </div>
                 <div className="detail-item">
                   <strong>👥 Spots Available:</strong> 
-                  <span className={cls.spots === 0 ? 'full' : 'available'}>
-                    {cls.spots} / {cls.maxSpots}
+                  <span className={cls.maxSpots - cls.enrolledStudents.length === 0 ? 'full' : 'available'}>
+                    {cls.maxSpots - cls.enrolledStudents.length} / {cls.maxSpots}
                   </span>
                 </div>
               </div>
@@ -189,25 +154,23 @@ const GroupClasses: React.FC = () => {
               <button 
                 className="btn enroll-btn"
                 onClick={() => handleEnroll(cls.id)}
-                disabled={!clientName || !clientEmail}
+                disabled={!clientName || !clientEmail || enrolling === cls.id}
               >
-                {cls.spots === 0 ? 'Join Waitlist 📝' : 'Enroll Now! 💖'}
+                {enrolling === cls.id 
+                  ? 'Enrolling...' 
+                  : cls.maxSpots - cls.enrolledStudents.length === 0 
+                    ? 'Join Waitlist 📝' 
+                    : 'Enroll Now! 💖'
+                }
               </button>
 
-              {cls.enrolled && cls.enrolled.length > 0 && (
+              {cls.enrolledStudents && cls.enrolledStudents.length > 0 && (
                 <div className="enrolled-list">
-                  <strong>Enrolled Students:</strong>
+                  <strong>Enrolled Students ({cls.enrolledStudents.length}):</strong>
                   <ul>
-                    {cls.enrolled.map((student, index) => (
+                    {cls.enrolledStudents.map((studentId, index) => (
                       <li key={index}>
-                        {student}
-                        <button 
-                          className="cancel-btn" 
-                          onClick={() => handleCancel(cls.id, student)}
-                          title="Cancel enrollment"
-                        >
-                          ❌
-                        </button>
+                        Student ID: {studentId}
                       </li>
                     ))}
                   </ul>
@@ -218,24 +181,9 @@ const GroupClasses: React.FC = () => {
                 <div className="waitlist">
                   <strong>Waitlist ({cls.waitlist.length} students):</strong>
                   <ul>
-                    {cls.waitlist.map((student, index) => (
+                    {cls.waitlist.map((studentId, index) => (
                       <li key={index}>
-                        {index + 1}. {student}
-                        <button 
-                          className="cancel-btn" 
-                          onClick={() => {
-                            const updatedClasses = classes.map(c => 
-                              c.id === cls.id 
-                                ? { ...c, waitlist: c.waitlist?.filter(s => s !== student) }
-                                : c
-                            );
-                            setClasses(updatedClasses);
-                            localStorage.setItem('groupClasses', JSON.stringify(updatedClasses));
-                          }}
-                          title="Remove from waitlist"
-                        >
-                          ❌
-                        </button>
+                        {index + 1}. Student ID: {studentId}
                       </li>
                     ))}
                   </ul>

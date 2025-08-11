@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { AvailableSlot, Booking, User } from '../types/auth';
+import { User } from '../types/auth';
+import { apiService, TimeSlot, Booking } from '../services/apiService';
 import './PrivateLessons.css';
 
 interface PrivateLessonsProps {
@@ -7,72 +8,48 @@ interface PrivateLessonsProps {
 }
 
 const PrivateLessons: React.FC<PrivateLessonsProps> = ({ user }) => {
-  const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([]);
-  const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
+  const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
+  const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [notes, setNotes] = useState('');
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Initialize with default availability if none exists
-  const initializeDefaultSlots = () => {
-    const existingSlots = localStorage.getItem('availableSlots');
-    if (!existingSlots || JSON.parse(existingSlots).length === 0) {
-      const defaultSlots: AvailableSlot[] = [];
-      const today = new Date();
-      
-      // Create slots for the next 14 days
-      for (let i = 1; i <= 14; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + i);
-        
-        // Skip weekends
-        if (date.getDay() === 0 || date.getDay() === 6) continue;
-        
-        // Add morning and afternoon slots
-        const timeSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM', '4:00 PM'];
-        
-        timeSlots.forEach(time => {
-          defaultSlots.push({
-            id: `default-${date.getTime()}-${time.replace(' ', '')}`,
-            date: date.toISOString().split('T')[0],
-            time: time,
-            duration: 60, // Default to 60 minute sessions
-            isBooked: false
-          });
-        });
-      }
-      
-      localStorage.setItem('availableSlots', JSON.stringify(defaultSlots));
-      console.log('🐕 Added default availability slots for demo purposes');
-    }
-  };
-
-  const loadAvailableSlots = useCallback(() => {
-    // Initialize defaults first
-    initializeDefaultSlots();
-    
-    const savedSlots = localStorage.getItem('availableSlots');
-    if (savedSlots) {
-      const slots: AvailableSlot[] = JSON.parse(savedSlots);
-      // Only show future slots that aren't booked
-      const availableSlots = slots.filter(slot => 
-        !slot.isBooked && new Date(slot.date) >= new Date()
+  const loadAvailableSlots = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      // Get only available slots from the API
+      const slots = await apiService.getSlots({ available: true });
+      // Filter to only show future slots
+      const futureSlots = slots.filter(slot => 
+        new Date(slot.date) >= new Date()
       );
-      setAvailableSlots(availableSlots);
+      setAvailableSlots(futureSlots);
+    } catch (err) {
+      console.error('Failed to load available slots:', err);
+      setError('Failed to load available slots. Please try again.');
+    } finally {
+      setLoading(false);
     }
   }, []);
 
-  const loadBookings = useCallback(() => {
-    const savedBookings = localStorage.getItem('bookings');
-    if (savedBookings) {
-      const allBookings: Booking[] = JSON.parse(savedBookings);
+  const loadBookings = useCallback(async () => {
+    try {
+      setError(null);
+      const allBookings = await apiService.getBookings();
+      // Filter to user's bookings and exclude cancelled ones
       const userBookings = allBookings.filter(booking => 
-        booking.customerEmail === user.email && booking.status !== 'cancelled'
+        booking.status !== 'cancelled'
       );
       setBookings(userBookings);
+    } catch (err) {
+      console.error('Failed to load bookings:', err);
+      setError('Failed to load your bookings. Please try again.');
     }
-  }, [user.email]);
+  }, []);
 
   useEffect(() => {
     loadAvailableSlots();
@@ -125,95 +102,62 @@ const PrivateLessons: React.FC<PrivateLessonsProps> = ({ user }) => {
     );
   };
 
-  const handleSlotClick = (slot: AvailableSlot) => {
+  const handleSlotClick = (slot: TimeSlot) => {
     setSelectedSlot(slot);
     setShowBookingForm(true);
   };
 
-  const confirmBooking = () => {
+  const confirmBooking = async () => {
     if (!selectedSlot) return;
 
-    const newBooking: Booking = {
-      id: `booking-${Date.now()}`,
-      slotId: selectedSlot.id,
-      customerEmail: user.email,
-      customerName: user.name,
-      dogName: user.dogName || '',
-      date: selectedSlot.date,
-      time: selectedSlot.time,
-      duration: selectedSlot.duration,
-      notes,
-      status: 'confirmed',
-      createdAt: new Date().toISOString()
-    };
+    try {
+      setLoading(true);
+      setError(null);
 
-    // Update the slot to mark it as booked
-    const savedSlots = localStorage.getItem('availableSlots');
-    if (savedSlots) {
-      const slots: AvailableSlot[] = JSON.parse(savedSlots);
-      const updatedSlots = slots.map(slot => 
-        slot.id === selectedSlot.id 
-          ? { 
-              ...slot, 
-              isBooked: true, 
-              bookedBy: user.id,
-              customerEmail: user.email,
-              customerName: user.name,
-              dogName: user.dogName,
-              notes 
-            }
-          : slot
-      );
-      localStorage.setItem('availableSlots', JSON.stringify(updatedSlots));
+      const newBooking = await apiService.createBooking({
+        slotId: selectedSlot.id,
+        dogName: user.dogName || '',
+        notes
+      });
+
+      // Update local state
+      setBookings(prev => [...prev, newBooking]);
+      setAvailableSlots(prev => prev.filter(slot => slot.id !== selectedSlot.id));
+      
+      // Reset form
+      setSelectedSlot(null);
+      setNotes('');
+      setShowBookingForm(false);
+
+      alert('Booking confirmed! We\'ll see you and your poodle soon! 🐕💖');
+    } catch (err) {
+      console.error('Failed to create booking:', err);
+      setError('Failed to create booking. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    // Save the booking
-    const savedBookings = localStorage.getItem('bookings');
-    const existingBookings: Booking[] = savedBookings ? JSON.parse(savedBookings) : [];
-    const updatedBookings = [...existingBookings, newBooking];
-    localStorage.setItem('bookings', JSON.stringify(updatedBookings));
-
-    // Update local state
-    setBookings(prev => [...prev, newBooking]);
-    setAvailableSlots(prev => prev.filter(slot => slot.id !== selectedSlot.id));
-    
-    // Reset form
-    setSelectedSlot(null);
-    setNotes('');
-    setShowBookingForm(false);
-
-    alert('Booking confirmed! We\'ll see you and your poodle soon! 🐕💖');
   };
 
-  const cancelBooking = (bookingId: string) => {
+  const cancelBooking = async (bookingId: string) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
-      const booking = bookings.find(b => b.id === bookingId);
-      if (booking) {
-        // Mark slot as available again
-        const savedSlots = localStorage.getItem('availableSlots');
-        if (savedSlots) {
-          const slots: AvailableSlot[] = JSON.parse(savedSlots);
-          const updatedSlots = slots.map(slot => 
-            slot.id === booking.slotId 
-              ? { ...slot, isBooked: false, bookedBy: undefined, customerEmail: undefined, customerName: undefined, dogName: undefined, notes: undefined }
-              : slot
-          );
-          localStorage.setItem('availableSlots', JSON.stringify(updatedSlots));
-        }
+      try {
+        setLoading(true);
+        setError(null);
 
-        // Update booking status
-        const savedBookings = localStorage.getItem('bookings');
-        if (savedBookings) {
-          const allBookings: Booking[] = JSON.parse(savedBookings);
-          const updatedBookings = allBookings.map(b => 
-            b.id === bookingId ? { ...b, status: 'cancelled' as const } : b
-          );
-          localStorage.setItem('bookings', JSON.stringify(updatedBookings));
-        }
+        await apiService.deleteBooking(bookingId);
 
         // Update local state
         setBookings(prev => prev.filter(b => b.id !== bookingId));
-        loadAvailableSlots(); // Refresh available slots
+        
+        // Refresh available slots to show the newly available slot
+        await loadAvailableSlots();
+        
+        alert('Booking cancelled successfully.');
+      } catch (err) {
+        console.error('Failed to cancel booking:', err);
+        setError('Failed to cancel booking. Please try again.');
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -226,6 +170,32 @@ const PrivateLessons: React.FC<PrivateLessonsProps> = ({ user }) => {
       <div className="card">
         <h2>📅 Book Private Lesson 🐕</h2>
         <p className="welcome-message">Welcome, {user.name}! Select a time slot below to book a private lesson for {user.dogName}.</p>
+        
+        {error && (
+          <div className="error-message" style={{ 
+            color: '#dc3545', 
+            backgroundColor: '#f8d7da', 
+            border: '1px solid #f5c6cb', 
+            borderRadius: '4px', 
+            padding: '10px', 
+            margin: '10px 0' 
+          }}>
+            {error}
+          </div>
+        )}
+        
+        {loading && (
+          <div className="loading-message" style={{ 
+            color: '#17a2b8', 
+            backgroundColor: '#d1ecf1', 
+            border: '1px solid #bee5eb', 
+            borderRadius: '4px', 
+            padding: '10px', 
+            margin: '10px 0' 
+          }}>
+            Loading...
+          </div>
+        )}
         
         {/* Beautiful Calendar Interface */}
         <div className="booking-calendar">
@@ -368,14 +338,16 @@ const PrivateLessons: React.FC<PrivateLessonsProps> = ({ user }) => {
                     setNotes('');
                   }}
                   className="btn cancel-btn"
+                  disabled={loading}
                 >
                   Cancel
                 </button>
                 <button 
                   onClick={confirmBooking}
                   className="btn confirm-btn"
+                  disabled={loading}
                 >
-                  Confirm Booking 🐕
+                  {loading ? 'Booking...' : 'Confirm Booking 🐕'}
                 </button>
               </div>
             </div>
@@ -389,18 +361,25 @@ const PrivateLessons: React.FC<PrivateLessonsProps> = ({ user }) => {
           <h3>Your Upcoming Lessons</h3>
           <div className="bookings-list">
             {bookings
-              .filter(booking => new Date(booking.date) >= new Date())
-              .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+              .filter(booking => {
+                const bookingDate = booking.slot?.date || '';
+                return bookingDate && new Date(bookingDate) >= new Date();
+              })
+              .sort((a, b) => {
+                const dateA = a.slot?.date || '';
+                const dateB = b.slot?.date || '';
+                return new Date(dateA).getTime() - new Date(dateB).getTime();
+              })
               .map(booking => (
                 <div key={booking.id} className="booking-item">
                   <div className="booking-header">
                     <div className="booking-date-time">
-                      <strong>{new Date(booking.date + 'T12:00:00').toLocaleDateString('en-US', {
+                      <strong>{booking.slot ? new Date(booking.slot.date + 'T12:00:00').toLocaleDateString('en-US', {
                         weekday: 'long',
                         month: 'long', 
                         day: 'numeric'
-                      })}</strong>
-                      <span>{booking.time}</span>
+                      }) : 'Date not available'}</strong>
+                      <span>{booking.slot?.time || 'Time not available'}</span>
                     </div>
                     <span className={`status-badge ${booking.status}`}>
                       {booking.status}
@@ -417,8 +396,9 @@ const PrivateLessons: React.FC<PrivateLessonsProps> = ({ user }) => {
                     <button 
                       onClick={() => cancelBooking(booking.id)}
                       className="btn cancel-booking-btn"
+                      disabled={loading}
                     >
-                      Cancel Booking
+                      {loading ? 'Cancelling...' : 'Cancel Booking'}
                     </button>
                   </div>
                 </div>

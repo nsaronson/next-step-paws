@@ -12,6 +12,7 @@ import DogIntakeForm from './components/DogIntakeForm';
 import LessonNotes from './components/LessonNotes';
 import UserProfile from './components/UserProfile';
 import { User, AvailableSlot } from './types/auth';
+import { authUtils } from './services/apiService';
 
 type View = 'classes' | 'private' | 'dashboard' | 'contact' | 'availability' | 'notes' | 'profile';
 
@@ -20,15 +21,20 @@ function App() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Check for saved user session
+    // Check for saved user session and valid JWT token
     try {
       const savedUser = localStorage.getItem('currentUser');
-      if (savedUser) {
+      if (savedUser && authUtils.isAuthenticated()) {
         setUser(JSON.parse(savedUser));
+      } else {
+        // Clear invalid session
+        localStorage.removeItem('currentUser');
+        authUtils.logout();
       }
     } catch (error) {
       console.warn('Failed to load user session:', error);
       localStorage.removeItem('currentUser');
+      authUtils.logout();
     }
   }, []);
 
@@ -40,6 +46,7 @@ function App() {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('currentUser');
+    authUtils.logout(); // This clears the JWT token
     setCurrentView('classes');
   };
 

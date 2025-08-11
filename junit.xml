@@ -1,39 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="94" failures="32" errors="0" time="7.168">
-  <testsuite name="localStorage utilities" errors="0" failures="0" skipped="0" timestamp="2025-08-11T00:56:44" time="0.503" tests="12">
-    <testcase classname="localStorage utilities Customer management should store and retrieve customers correctly" name="localStorage utilities Customer management should store and retrieve customers correctly" time="0.002">
+<testsuites name="jest tests" tests="119" failures="40" errors="0" time="3.852">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2025-08-11T01:15:59" time="0.634" tests="2">
+    <testcase classname=" renders login page for unauthenticated users" name=" renders login page for unauthenticated users" time="0.049">
     </testcase>
-    <testcase classname="localStorage utilities Customer management should handle empty customers array" name="localStorage utilities Customer management should handle empty customers array" time="0.001">
+    <testcase classname=" renders customer login form by default" name=" renders customer login form by default" time="0.005">
     </testcase>
-    <testcase classname="localStorage utilities Customer management should handle null localStorage value" name="localStorage utilities Customer management should handle null localStorage value" time="0.001">
+  </testsuite>
+  <testsuite name="localStorage utilities" errors="0" failures="0" skipped="0" timestamp="2025-08-11T01:15:59" time="0.052" tests="12">
+    <testcase classname="localStorage utilities Customer management should store and retrieve customers correctly" name="localStorage utilities Customer management should store and retrieve customers correctly" time="0">
+    </testcase>
+    <testcase classname="localStorage utilities Customer management should handle empty customers array" name="localStorage utilities Customer management should handle empty customers array" time="0">
+    </testcase>
+    <testcase classname="localStorage utilities Customer management should handle null localStorage value" name="localStorage utilities Customer management should handle null localStorage value" time="0">
     </testcase>
     <testcase classname="localStorage utilities Group classes management should store and retrieve group classes" name="localStorage utilities Group classes management should store and retrieve group classes" time="0.001">
     </testcase>
-    <testcase classname="localStorage utilities Group classes management should handle class enrollment updates" name="localStorage utilities Group classes management should handle class enrollment updates" time="0">
+    <testcase classname="localStorage utilities Group classes management should handle class enrollment updates" name="localStorage utilities Group classes management should handle class enrollment updates" time="0.001">
     </testcase>
     <testcase classname="localStorage utilities Available slots management should store and retrieve available slots" name="localStorage utilities Available slots management should store and retrieve available slots" time="0">
     </testcase>
-    <testcase classname="localStorage utilities Available slots management should handle slot booking updates" name="localStorage utilities Available slots management should handle slot booking updates" time="0.001">
+    <testcase classname="localStorage utilities Available slots management should handle slot booking updates" name="localStorage utilities Available slots management should handle slot booking updates" time="0">
     </testcase>
     <testcase classname="localStorage utilities Bookings management should store and retrieve bookings" name="localStorage utilities Bookings management should store and retrieve bookings" time="0">
     </testcase>
-    <testcase classname="localStorage utilities Data validation should validate email format" name="localStorage utilities Data validation should validate email format" time="0">
+    <testcase classname="localStorage utilities Data validation should validate email format" name="localStorage utilities Data validation should validate email format" time="0.001">
     </testcase>
-    <testcase classname="localStorage utilities Data validation should validate date objects" name="localStorage utilities Data validation should validate date objects" time="0.001">
+    <testcase classname="localStorage utilities Data validation should validate date objects" name="localStorage utilities Data validation should validate date objects" time="0">
     </testcase>
     <testcase classname="localStorage utilities Error handling should handle JSON parsing errors gracefully" name="localStorage utilities Error handling should handle JSON parsing errors gracefully" time="0.001">
     </testcase>
     <testcase classname="localStorage utilities Error handling should handle localStorage access errors" name="localStorage utilities Error handling should handle localStorage access errors" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2025-08-11T00:56:44" time="1.022" tests="2">
-    <testcase classname=" renders login page for unauthenticated users" name=" renders login page for unauthenticated users" time="0.098">
+  <testsuite name="Email Service" errors="0" failures="7" skipped="0" timestamp="2025-08-11T01:15:58" time="0.981" tests="20">
+    <testcase classname="Email Service EmailService.sendEmail should send email successfully with valid configuration" name="Email Service EmailService.sendEmail should send email successfully with valid configuration" time="0.008">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Email sent successfully!&quot;
+Received: &quot;Email sent successfully (Demo Mode)&quot;
+    at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/services/emailService.test.ts:52:30)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname=" renders customer login form by default" name=" renders customer login form by default" time="0.012">
+    <testcase classname="Email Service EmailService.sendEmail should use demo mode when EmailJS is not configured" name="Email Service EmailService.sendEmail should use demo mode when EmailJS is not configured" time="0.002">
+    </testcase>
+    <testcase classname="Email Service EmailService.sendEmail should handle EmailJS service errors" name="Email Service EmailService.sendEmail should handle EmailJS service errors" time="0.001">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: false
+Received: true
+    at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/services/emailService.test.ts:85:30)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="Email Service EmailService.sendEmail should handle network errors" name="Email Service EmailService.sendEmail should handle network errors" time="0.001">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: false
+Received: true
+    at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/services/emailService.test.ts:98:30)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="Email Service EmailService.sendEmail should log demo mode email content" name="Email Service EmailService.sendEmail should log demo mode email content" time="0.001">
+    </testcase>
+    <testcase classname="Email Service EmailService.sendBookingEmail should send booking confirmation email" name="Email Service EmailService.sendBookingEmail should send booking confirmation email" time="0.055">
+    </testcase>
+    <testcase classname="Email Service EmailService.sendBookingEmail should handle missing template gracefully" name="Email Service EmailService.sendBookingEmail should handle missing template gracefully" time="0.001">
+    </testcase>
+    <testcase classname="Email Service EmailService.sendBookingEmail should include custom data in email" name="Email Service EmailService.sendBookingEmail should include custom data in email" time="0.001">
+    </testcase>
+    <testcase classname="Email Service EmailService.sendBookingEmail should format date correctly" name="Email Service EmailService.sendBookingEmail should format date correctly" time="0.001">
+    </testcase>
+    <testcase classname="Email Service EmailService.sendBookingEmail should handle booking without notes" name="Email Service EmailService.sendBookingEmail should handle booking without notes" time="0.001">
+    </testcase>
+    <testcase classname="Email Service Template System should have required email templates" name="Email Service Template System should have required email templates" time="0.001">
+      <failure>Error: expect(received).toContain(expected) // indexOf
+
+Expected value: &quot;cancellation_notice&quot;
+Received array: [&quot;booking_confirmation&quot;, &quot;lesson_reminder&quot;, &quot;follow_up&quot;, &quot;custom&quot;]
+    at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/services/emailService.test.ts:204:27)
+    at Promise.then.completed (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:60:9)
+    at _runTestsForDescribeBlock (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+    at jestAdapter (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+    <testcase classname="Email Service Template System should have properly structured templates" name="Email Service Template System should have properly structured templates" time="0.001">
+    </testcase>
+    <testcase classname="Email Service Template System should include customer and dog variables in all templates" name="Email Service Template System should include customer and dog variables in all templates" time="0">
+    </testcase>
+    <testcase classname="Email Service Template Variable Replacement should replace template variables correctly" name="Email Service Template Variable Replacement should replace template variables correctly" time="0.001">
+      <failure>Error: expect(received).toContain(expected) // indexOf
+
+Expected substring: &quot;Test User&quot;
+Received string:    &quot;Your Private Lesson is Confirmed! 🐕&quot;
+    at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/services/emailService.test.ts:257:25)
+    at Promise.then.completed (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:60:9)
+    at _runTestsForDescribeBlock (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+    at jestAdapter (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+    <testcase classname="Email Service Template Variable Replacement should handle missing template variables gracefully" name="Email Service Template Variable Replacement should handle missing template variables gracefully" time="0.001">
+    </testcase>
+    <testcase classname="Email Service Error Handling should handle invalid booking data" name="Email Service Error Handling should handle invalid booking data" time="0.001">
+    </testcase>
+    <testcase classname="Email Service Error Handling should handle invalid customer data" name="Email Service Error Handling should handle invalid customer data" time="0">
+    </testcase>
+    <testcase classname="Email Service Error Handling should handle EmailJS initialization errors" name="Email Service Error Handling should handle EmailJS initialization errors" time="0.001">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: false
+Received: true
+    at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/services/emailService.test.ts:335:30)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="Email Service Integration Tests should handle complete booking email workflow" name="Email Service Integration Tests should handle complete booking email workflow" time="0.001">
+    </testcase>
+    <testcase classname="Email Service Integration Tests should handle lesson notes email workflow" name="Email Service Integration Tests should handle lesson notes email workflow" time="0">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/services/emailService.test.ts:386:30)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
   </testsuite>
-  <testsuite name="GroupClasses Component" errors="0" failures="15" skipped="0" timestamp="2025-08-11T00:56:44" time="1.295" tests="16">
-    <testcase classname="GroupClasses Component renders group classes list" name="GroupClasses Component renders group classes list" time="0.221">
+  <testsuite name="GroupClasses Component" errors="0" failures="15" skipped="0" timestamp="2025-08-11T01:15:58" time="1.025" tests="16">
+    <testcase classname="GroupClasses Component renders group classes list" name="GroupClasses Component renders group classes list" time="0.114">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Group Classes. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -281,7 +393,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component displays class information correctly" name="GroupClasses Component displays class information correctly" time="0.045">
+    <testcase classname="GroupClasses Component displays class information correctly" name="GroupClasses Component displays class information correctly" time="0.032">
       <failure>TestingLibraryElementError: Unable to find an element with the text: $120. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -529,7 +641,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component shows different enrollment statuses" name="GroupClasses Component shows different enrollment statuses" time="0.025">
+    <testcase classname="GroupClasses Component shows different enrollment statuses" name="GroupClasses Component shows different enrollment statuses" time="0.01">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 0/8 enrolled. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -777,7 +889,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component displays correct level colors" name="GroupClasses Component displays correct level colors" time="0.053">
+    <testcase classname="GroupClasses Component displays correct level colors" name="GroupClasses Component displays correct level colors" time="0.048">
       <failure>Error: expect(element).toHaveStyle()
 
 - Expected
@@ -799,7 +911,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component opens enrollment modal when enroll button is clicked" name="GroupClasses Component opens enrollment modal when enroll button is clicked" time="0.018">
+    <testcase classname="GroupClasses Component opens enrollment modal when enroll button is clicked" name="GroupClasses Component opens enrollment modal when enroll button is clicked" time="0.013">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Enroll Now. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -1046,7 +1158,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component validates enrollment form fields" name="GroupClasses Component validates enrollment form fields" time="0.014">
+    <testcase classname="GroupClasses Component validates enrollment form fields" name="GroupClasses Component validates enrollment form fields" time="0.016">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Enroll Now. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -1293,7 +1405,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component successfully enrolls student in available class" name="GroupClasses Component successfully enrolls student in available class" time="0.012">
+    <testcase classname="GroupClasses Component successfully enrolls student in available class" name="GroupClasses Component successfully enrolls student in available class" time="0.064">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Enroll Now. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -1540,7 +1652,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component adds student to waitlist when class is full" name="GroupClasses Component adds student to waitlist when class is full" time="0.009">
+    <testcase classname="GroupClasses Component adds student to waitlist when class is full" name="GroupClasses Component adds student to waitlist when class is full" time="0.015">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Join Waitlist. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -1787,7 +1899,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component prevents duplicate enrollment" name="GroupClasses Component prevents duplicate enrollment" time="0.015">
+    <testcase classname="GroupClasses Component prevents duplicate enrollment" name="GroupClasses Component prevents duplicate enrollment" time="0.024">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Enroll Now. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -2034,7 +2146,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component closes modal when close button is clicked" name="GroupClasses Component closes modal when close button is clicked" time="0.014">
+    <testcase classname="GroupClasses Component closes modal when close button is clicked" name="GroupClasses Component closes modal when close button is clicked" time="0.012">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Enroll Now. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -2281,7 +2393,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component displays enrolled students list when expanded" name="GroupClasses Component displays enrolled students list when expanded" time="0.026">
+    <testcase classname="GroupClasses Component displays enrolled students list when expanded" name="GroupClasses Component displays enrolled students list when expanded" time="0.009">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Show Students. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -2528,7 +2640,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component handles class withdrawal correctly" name="GroupClasses Component handles class withdrawal correctly" time="0.006">
+    <testcase classname="GroupClasses Component handles class withdrawal correctly" name="GroupClasses Component handles class withdrawal correctly" time="0.007">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Show Students. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -2775,7 +2887,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component shows waitlist information when available" name="GroupClasses Component shows waitlist information when available" time="0.017">
+    <testcase classname="GroupClasses Component shows waitlist information when available" name="GroupClasses Component shows waitlist information when available" time="0.006">
       <failure>TestingLibraryElementError: Unable to find an element with the text: Show Students. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -3376,15 +3488,15 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="GroupClasses Component filters classes by level correctly" name="GroupClasses Component filters classes by level correctly" time="0.004">
+    <testcase classname="GroupClasses Component filters classes by level correctly" name="GroupClasses Component filters classes by level correctly" time="0.022">
     </testcase>
   </testsuite>
-  <testsuite name="Calendar Component" errors="0" failures="8" skipped="0" timestamp="2025-08-11T00:56:44" time="1.589" tests="17">
-    <testcase classname="Calendar Component renders calendar with week view" name="Calendar Component renders calendar with week view" time="0.305">
+  <testsuite name="Calendar Component" errors="0" failures="8" skipped="0" timestamp="2025-08-11T01:15:58" time="1.264" tests="17">
+    <testcase classname="Calendar Component renders calendar with week view" name="Calendar Component renders calendar with week view" time="0.158">
     </testcase>
-    <testcase classname="Calendar Component displays time slots correctly" name="Calendar Component displays time slots correctly" time="0.05">
+    <testcase classname="Calendar Component displays time slots correctly" name="Calendar Component displays time slots correctly" time="0.028">
     </testcase>
-    <testcase classname="Calendar Component shows available slots with correct duration labels" name="Calendar Component shows available slots with correct duration labels" time="0.045">
+    <testcase classname="Calendar Component shows available slots with correct duration labels" name="Calendar Component shows available slots with correct duration labels" time="0.033">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 30m. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -3822,7 +3934,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="Calendar Component distinguishes between available and booked slots" name="Calendar Component distinguishes between available and booked slots" time="0.024">
+    <testcase classname="Calendar Component distinguishes between available and booked slots" name="Calendar Component distinguishes between available and booked slots" time="0.083">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 30m. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -4260,7 +4372,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="Calendar Component calls onSlotSelect when available slot is clicked" name="Calendar Component calls onSlotSelect when available slot is clicked" time="0.019">
+    <testcase classname="Calendar Component calls onSlotSelect when available slot is clicked" name="Calendar Component calls onSlotSelect when available slot is clicked" time="0.009">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 30m. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -4698,7 +4810,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="Calendar Component does not call onSlotSelect when booked slot is clicked" name="Calendar Component does not call onSlotSelect when booked slot is clicked" time="0.017">
+    <testcase classname="Calendar Component does not call onSlotSelect when booked slot is clicked" name="Calendar Component does not call onSlotSelect when booked slot is clicked" time="0.013">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 60m. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -5136,7 +5248,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="Calendar Component highlights selected slot" name="Calendar Component highlights selected slot" time="0.025">
+    <testcase classname="Calendar Component highlights selected slot" name="Calendar Component highlights selected slot" time="0.035">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 30m. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -5574,15 +5686,15 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="Calendar Component navigates to previous week" name="Calendar Component navigates to previous week" time="0.092">
+    <testcase classname="Calendar Component navigates to previous week" name="Calendar Component navigates to previous week" time="0.066">
     </testcase>
-    <testcase classname="Calendar Component navigates to next week" name="Calendar Component navigates to next week" time="0.029">
+    <testcase classname="Calendar Component navigates to next week" name="Calendar Component navigates to next week" time="0.021">
     </testcase>
-    <testcase classname="Calendar Component displays day headers correctly" name="Calendar Component displays day headers correctly" time="0.03">
+    <testcase classname="Calendar Component displays day headers correctly" name="Calendar Component displays day headers correctly" time="0.013">
     </testcase>
-    <testcase classname="Calendar Component disables weekend slots" name="Calendar Component disables weekend slots" time="0.022">
+    <testcase classname="Calendar Component disables weekend slots" name="Calendar Component disables weekend slots" time="0.01">
     </testcase>
-    <testcase classname="Calendar Component shows tooltip with slot information" name="Calendar Component shows tooltip with slot information" time="0.018">
+    <testcase classname="Calendar Component shows tooltip with slot information" name="Calendar Component shows tooltip with slot information" time="0.012">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 30m. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -6020,7 +6132,7 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="Calendar Component shows booked slot tooltip correctly" name="Calendar Component shows booked slot tooltip correctly" time="0.029">
+    <testcase classname="Calendar Component shows booked slot tooltip correctly" name="Calendar Component shows booked slot tooltip correctly" time="0.005">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 60m. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -6458,11 +6570,11 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="Calendar Component displays legend correctly" name="Calendar Component displays legend correctly" time="0.02">
+    <testcase classname="Calendar Component displays legend correctly" name="Calendar Component displays legend correctly" time="0.078">
     </testcase>
-    <testcase classname="Calendar Component handles empty slots array" name="Calendar Component handles empty slots array" time="0.019">
+    <testcase classname="Calendar Component handles empty slots array" name="Calendar Component handles empty slots array" time="0.025">
     </testcase>
-    <testcase classname="Calendar Component handles slots for different durations in same time slot" name="Calendar Component handles slots for different durations in same time slot" time="0.018">
+    <testcase classname="Calendar Component handles slots for different durations in same time slot" name="Calendar Component handles slots for different durations in same time slot" time="0.062">
       <failure>TestingLibraryElementError: Unable to find an element with the text: 30m. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -6901,47 +7013,79 @@ Ignored nodes: comments, script, style
     at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
-    <testcase classname="Calendar Component formats dates correctly for display" name="Calendar Component formats dates correctly for display" time="0.011">
+    <testcase classname="Calendar Component formats dates correctly for display" name="Calendar Component formats dates correctly for display" time="0.026">
     </testcase>
   </testsuite>
-  <testsuite name="UserProfile Component" errors="0" failures="0" skipped="0" timestamp="2025-08-11T00:56:44" time="2.119" tests="14">
-    <testcase classname="UserProfile Component renders user profile in view mode initially" name="UserProfile Component renders user profile in view mode initially" time="0.178">
+  <testsuite name="OwnerSchedule Component" errors="0" failures="1" skipped="0" timestamp="2025-08-11T01:15:58" time="1.454" tests="5">
+    <testcase classname="OwnerSchedule Component renders schedule interface correctly" name="OwnerSchedule Component renders schedule interface correctly" time="0.086">
+    </testcase>
+    <testcase classname="OwnerSchedule Component exports appointment to Google Calendar correctly" name="OwnerSchedule Component exports appointment to Google Calendar correctly" time="0.013">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+Expected: StringContaining &quot;https://calendar.google.com/calendar/render?action=TEMPLATE&quot;, &quot;_blank&quot;
+
+Number of calls: 0
+    at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/components/OwnerSchedule.test.tsx:92:28)
+    at Promise.then.completed (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+    at jestAdapter (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+    <testcase classname="OwnerSchedule Component handles multiple appointments with confirmation" name="OwnerSchedule Component handles multiple appointments with confirmation" time="0.005">
+    </testcase>
+    <testcase classname="OwnerSchedule Component handles empty schedule gracefully" name="OwnerSchedule Component handles empty schedule gracefully" time="0.006">
+    </testcase>
+    <testcase classname="OwnerSchedule Component generates ICS file download correctly" name="OwnerSchedule Component generates ICS file download correctly" time="0.019">
+    </testcase>
+  </testsuite>
+  <testsuite name="UserProfile Component" errors="0" failures="0" skipped="0" timestamp="2025-08-11T01:15:58" time="1.735" tests="14">
+    <testcase classname="UserProfile Component renders user profile in view mode initially" name="UserProfile Component renders user profile in view mode initially" time="0.052">
     </testcase>
     <testcase classname="UserProfile Component displays owner role correctly" name="UserProfile Component displays owner role correctly" time="0.015">
     </testcase>
-    <testcase classname="UserProfile Component switches to edit mode when Edit Profile is clicked" name="UserProfile Component switches to edit mode when Edit Profile is clicked" time="0.115">
+    <testcase classname="UserProfile Component switches to edit mode when Edit Profile is clicked" name="UserProfile Component switches to edit mode when Edit Profile is clicked" time="0.054">
     </testcase>
-    <testcase classname="UserProfile Component allows customer to edit name and dog name" name="UserProfile Component allows customer to edit name and dog name" time="0.154">
+    <testcase classname="UserProfile Component allows customer to edit name and dog name" name="UserProfile Component allows customer to edit name and dog name" time="0.16">
     </testcase>
-    <testcase classname="UserProfile Component shows password change fields when checkbox is checked" name="UserProfile Component shows password change fields when checkbox is checked" time="0.034">
+    <testcase classname="UserProfile Component shows password change fields when checkbox is checked" name="UserProfile Component shows password change fields when checkbox is checked" time="0.036">
     </testcase>
-    <testcase classname="UserProfile Component validates password change requirements" name="UserProfile Component validates password change requirements" time="0.079">
+    <testcase classname="UserProfile Component validates password change requirements" name="UserProfile Component validates password change requirements" time="0.069">
     </testcase>
-    <testcase classname="UserProfile Component validates new password length" name="UserProfile Component validates new password length" time="0.132">
+    <testcase classname="UserProfile Component validates new password length" name="UserProfile Component validates new password length" time="0.114">
     </testcase>
-    <testcase classname="UserProfile Component validates password confirmation match" name="UserProfile Component validates password confirmation match" time="0.199">
+    <testcase classname="UserProfile Component validates password confirmation match" name="UserProfile Component validates password confirmation match" time="0.318">
     </testcase>
-    <testcase classname="UserProfile Component validates current password is correct" name="UserProfile Component validates current password is correct" time="0.224">
+    <testcase classname="UserProfile Component validates current password is correct" name="UserProfile Component validates current password is correct" time="0.144">
     </testcase>
-    <testcase classname="UserProfile Component successfully changes password with valid inputs" name="UserProfile Component successfully changes password with valid inputs" time="0.152">
+    <testcase classname="UserProfile Component successfully changes password with valid inputs" name="UserProfile Component successfully changes password with valid inputs" time="0.12">
     </testcase>
-    <testcase classname="UserProfile Component cancels editing and resets form" name="UserProfile Component cancels editing and resets form" time="0.058">
+    <testcase classname="UserProfile Component cancels editing and resets form" name="UserProfile Component cancels editing and resets form" time="0.052">
     </testcase>
-    <testcase classname="UserProfile Component updates localStorage for customer changes" name="UserProfile Component updates localStorage for customer changes" time="0.043">
+    <testcase classname="UserProfile Component updates localStorage for customer changes" name="UserProfile Component updates localStorage for customer changes" time="0.062">
     </testcase>
-    <testcase classname="UserProfile Component disables email field editing" name="UserProfile Component disables email field editing" time="0.004">
+    <testcase classname="UserProfile Component disables email field editing" name="UserProfile Component disables email field editing" time="0.008">
     </testcase>
-    <testcase classname="UserProfile Component shows correct role badge styling" name="UserProfile Component shows correct role badge styling" time="0.014">
+    <testcase classname="UserProfile Component shows correct role badge styling" name="UserProfile Component shows correct role badge styling" time="0.013">
     </testcase>
   </testsuite>
-  <testsuite name="Login Component" errors="0" failures="7" skipped="0" timestamp="2025-08-11T00:56:44" time="2.327" tests="12">
-    <testcase classname="Login Component renders login page with customer login selected by default" name="Login Component renders login page with customer login selected by default" time="0.164">
+  <testsuite name="Login Component" errors="0" failures="7" skipped="0" timestamp="2025-08-11T01:15:58" time="1.904" tests="12">
+    <testcase classname="Login Component renders login page with customer login selected by default" name="Login Component renders login page with customer login selected by default" time="0.09">
     </testcase>
-    <testcase classname="Login Component switches between customer and owner login modes" name="Login Component switches between customer and owner login modes" time="0.094">
+    <testcase classname="Login Component switches between customer and owner login modes" name="Login Component switches between customer and owner login modes" time="0.058">
     </testcase>
-    <testcase classname="Login Component shows signup form when &quot;Create Account&quot; is clicked" name="Login Component shows signup form when &quot;Create Account&quot; is clicked" time="0.039">
+    <testcase classname="Login Component shows signup form when &quot;Create Account&quot; is clicked" name="Login Component shows signup form when &quot;Create Account&quot; is clicked" time="0.035">
     </testcase>
-    <testcase classname="Login Component validates required fields during customer signup" name="Login Component validates required fields during customer signup" time="0.182">
+    <testcase classname="Login Component validates required fields during customer signup" name="Login Component validates required fields during customer signup" time="0.22">
       <failure>TestingLibraryElementError: Unable to find an accessible element with the role &quot;button&quot; and name `/sign up/i`
 
 Here are the accessible roles:
@@ -7105,7 +7249,7 @@ Ignored nodes: comments, script, style
     at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/components/Login.test.tsx:67:34)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="Login Component validates password length during signup" name="Login Component validates password length during signup" time="0.218">
+    <testcase classname="Login Component validates password length during signup" name="Login Component validates password length during signup" time="0.239">
       <failure>TestingLibraryElementError: Unable to find an accessible element with the role &quot;button&quot; and name `/sign up/i`
 
 Here are the accessible roles:
@@ -7269,7 +7413,7 @@ Ignored nodes: comments, script, style
     at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/components/Login.test.tsx:86:34)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="Login Component successfully creates new customer account" name="Login Component successfully creates new customer account" time="0.212">
+    <testcase classname="Login Component successfully creates new customer account" name="Login Component successfully creates new customer account" time="0.326">
       <failure>TestingLibraryElementError: Unable to find an accessible element with the role &quot;button&quot; and name `/sign up/i`
 
 Here are the accessible roles:
@@ -7433,7 +7577,7 @@ Ignored nodes: comments, script, style
     at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/components/Login.test.tsx:105:34)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="Login Component prevents duplicate customer registration" name="Login Component prevents duplicate customer registration" time="0.25">
+    <testcase classname="Login Component prevents duplicate customer registration" name="Login Component prevents duplicate customer registration" time="0.123">
       <failure>TestingLibraryElementError: Unable to find an accessible element with the role &quot;button&quot; and name `/sign up/i`
 
 Here are the accessible roles:
@@ -7597,7 +7741,7 @@ Ignored nodes: comments, script, style
     at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/components/Login.test.tsx:139:34)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="Login Component successfully logs in existing customer with correct password" name="Login Component successfully logs in existing customer with correct password" time="0.115">
+    <testcase classname="Login Component successfully logs in existing customer with correct password" name="Login Component successfully logs in existing customer with correct password" time="0.118">
       <failure>TestingLibraryElementError: Unable to find an accessible element with the role &quot;button&quot; and name `/sign in as customer/i`
 
 Here are the accessible roles:
@@ -7733,7 +7877,7 @@ Ignored nodes: comments, script, style
     at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/components/Login.test.tsx:165:34)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="Login Component rejects customer login with incorrect password" name="Login Component rejects customer login with incorrect password" time="0.104">
+    <testcase classname="Login Component rejects customer login with incorrect password" name="Login Component rejects customer login with incorrect password" time="0.063">
       <failure>TestingLibraryElementError: Unable to find an accessible element with the role &quot;button&quot; and name `/sign in as customer/i`
 
 Here are the accessible roles:
@@ -7869,11 +8013,11 @@ Ignored nodes: comments, script, style
     at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/components/Login.test.tsx:195:34)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="Login Component successfully logs in owner with correct credentials" name="Login Component successfully logs in owner with correct credentials" time="0.068">
+    <testcase classname="Login Component successfully logs in owner with correct credentials" name="Login Component successfully logs in owner with correct credentials" time="0.034">
     </testcase>
-    <testcase classname="Login Component rejects owner login with incorrect credentials" name="Login Component rejects owner login with incorrect credentials" time="0.061">
+    <testcase classname="Login Component rejects owner login with incorrect credentials" name="Login Component rejects owner login with incorrect credentials" time="0.029">
     </testcase>
-    <testcase classname="Login Component validates required fields for login" name="Login Component validates required fields for login" time="0.036">
+    <testcase classname="Login Component validates required fields for login" name="Login Component validates required fields for login" time="0.022">
       <failure>TestingLibraryElementError: Unable to find an accessible element with the role &quot;button&quot; and name `/sign in as customer/i`
 
 Here are the accessible roles:
@@ -8023,32 +8167,32 @@ Ignored nodes: comments, script, style
     at Object.worker (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
     </testcase>
   </testsuite>
-  <testsuite name="ContactUs Component" errors="0" failures="0" skipped="0" timestamp="2025-08-11T00:56:44" time="3.711" tests="11">
-    <testcase classname="ContactUs Component renders contact form with all fields" name="ContactUs Component renders contact form with all fields" time="0.179">
+  <testsuite name="ContactUs Component" errors="0" failures="0" skipped="0" timestamp="2025-08-11T01:15:58" time="2.5" tests="11">
+    <testcase classname="ContactUs Component renders contact form with all fields" name="ContactUs Component renders contact form with all fields" time="0.132">
     </testcase>
-    <testcase classname="ContactUs Component displays contact information" name="ContactUs Component displays contact information" time="0.039">
+    <testcase classname="ContactUs Component displays contact information" name="ContactUs Component displays contact information" time="0.027">
     </testcase>
-    <testcase classname="ContactUs Component validates required fields" name="ContactUs Component validates required fields" time="0.049">
+    <testcase classname="ContactUs Component validates required fields" name="ContactUs Component validates required fields" time="0.03">
     </testcase>
-    <testcase classname="ContactUs Component successfully submits contact form" name="ContactUs Component successfully submits contact form" time="0.706">
+    <testcase classname="ContactUs Component successfully submits contact form" name="ContactUs Component successfully submits contact form" time="0.908">
     </testcase>
-    <testcase classname="ContactUs Component shows success message after submission" name="ContactUs Component shows success message after submission" time="0.364">
+    <testcase classname="ContactUs Component shows success message after submission" name="ContactUs Component shows success message after submission" time="0.221">
     </testcase>
-    <testcase classname="ContactUs Component resets form after success timeout" name="ContactUs Component resets form after success timeout" time="0.273">
+    <testcase classname="ContactUs Component resets form after success timeout" name="ContactUs Component resets form after success timeout" time="0.148">
     </testcase>
-    <testcase classname="ContactUs Component handles service type selection" name="ContactUs Component handles service type selection" time="0.025">
+    <testcase classname="ContactUs Component handles service type selection" name="ContactUs Component handles service type selection" time="0.017">
     </testcase>
-    <testcase classname="ContactUs Component handles optional fields correctly" name="ContactUs Component handles optional fields correctly" time="0.474">
+    <testcase classname="ContactUs Component handles optional fields correctly" name="ContactUs Component handles optional fields correctly" time="0.138">
     </testcase>
-    <testcase classname="ContactUs Component preserves existing contact submissions" name="ContactUs Component preserves existing contact submissions" time="0.418">
+    <testcase classname="ContactUs Component preserves existing contact submissions" name="ContactUs Component preserves existing contact submissions" time="0.168">
     </testcase>
-    <testcase classname="ContactUs Component creates submission with correct structure" name="ContactUs Component creates submission with correct structure" time="0.401">
+    <testcase classname="ContactUs Component creates submission with correct structure" name="ContactUs Component creates submission with correct structure" time="0.187">
     </testcase>
-    <testcase classname="ContactUs Component displays all service type options" name="ContactUs Component displays all service type options" time="0.059">
+    <testcase classname="ContactUs Component displays all service type options" name="ContactUs Component displays all service type options" time="0.003">
     </testcase>
   </testsuite>
-  <testsuite name="User Workflow Integration Tests" errors="0" failures="2" skipped="0" timestamp="2025-08-11T00:56:44" time="5.127" tests="10">
-    <testcase classname="User Workflow Integration Tests Customer Onboarding Flow guides new customer through complete onboarding process" name="User Workflow Integration Tests Customer Onboarding Flow guides new customer through complete onboarding process" time="0.399">
+  <testsuite name="User Workflow Integration Tests" errors="0" failures="2" skipped="0" timestamp="2025-08-11T01:15:58" time="2.85" tests="10">
+    <testcase classname="User Workflow Integration Tests Customer Onboarding Flow guides new customer through complete onboarding process" name="User Workflow Integration Tests Customer Onboarding Flow guides new customer through complete onboarding process" time="0.684">
       <failure>TestingLibraryElementError: Found multiple elements with the display value: .
 
 Here are the matching elements:
@@ -8556,13 +8700,13 @@ Ignored nodes: comments, script, style
     at getByDisplayValue (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
     at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/__tests__/integration/UserWorkflow.test.tsx:62:35)</failure>
     </testcase>
-    <testcase classname="User Workflow Integration Tests Customer Onboarding Flow blocks access to main app without completed onboarding" name="User Workflow Integration Tests Customer Onboarding Flow blocks access to main app without completed onboarding" time="0.066">
+    <testcase classname="User Workflow Integration Tests Customer Onboarding Flow blocks access to main app without completed onboarding" name="User Workflow Integration Tests Customer Onboarding Flow blocks access to main app without completed onboarding" time="0.009">
     </testcase>
-    <testcase classname="User Workflow Integration Tests Customer Booking Flow allows customer to book a private lesson" name="User Workflow Integration Tests Customer Booking Flow allows customer to book a private lesson" time="0.065">
+    <testcase classname="User Workflow Integration Tests Customer Booking Flow allows customer to book a private lesson" name="User Workflow Integration Tests Customer Booking Flow allows customer to book a private lesson" time="0.093">
     </testcase>
-    <testcase classname="User Workflow Integration Tests Customer Booking Flow allows customer to enroll in group class" name="User Workflow Integration Tests Customer Booking Flow allows customer to enroll in group class" time="0.105">
+    <testcase classname="User Workflow Integration Tests Customer Booking Flow allows customer to enroll in group class" name="User Workflow Integration Tests Customer Booking Flow allows customer to enroll in group class" time="0.115">
     </testcase>
-    <testcase classname="User Workflow Integration Tests Owner Workflow allows owner to access all management features" name="User Workflow Integration Tests Owner Workflow allows owner to access all management features" time="1.082">
+    <testcase classname="User Workflow Integration Tests Owner Workflow allows owner to access all management features" name="User Workflow Integration Tests Owner Workflow allows owner to access all management features" time="1.147">
       <failure>Error: Unable to find an element with the text: Owner Dashboard. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 Ignored nodes: comments, script, style
@@ -9283,13 +9427,13 @@ Ignored nodes: comments, script, style
     at waitForWrapper (/Users/nathanaronson/amp/dog-training-scheduler/node_modules/@testing-library/dom/dist/wait-for.js:163:27)
     at Object.&lt;anonymous&gt; (/Users/nathanaronson/amp/dog-training-scheduler/src/__tests__/integration/UserWorkflow.test.tsx:205:20)</failure>
     </testcase>
-    <testcase classname="User Workflow Integration Tests Profile Management allows user to update their profile" name="User Workflow Integration Tests Profile Management allows user to update their profile" time="0.077">
+    <testcase classname="User Workflow Integration Tests Profile Management allows user to update their profile" name="User Workflow Integration Tests Profile Management allows user to update their profile" time="0.034">
     </testcase>
-    <testcase classname="User Workflow Integration Tests Navigation and State Persistence maintains user session across navigation" name="User Workflow Integration Tests Navigation and State Persistence maintains user session across navigation" time="0.044">
+    <testcase classname="User Workflow Integration Tests Navigation and State Persistence maintains user session across navigation" name="User Workflow Integration Tests Navigation and State Persistence maintains user session across navigation" time="0.043">
     </testcase>
-    <testcase classname="User Workflow Integration Tests Navigation and State Persistence handles logout correctly" name="User Workflow Integration Tests Navigation and State Persistence handles logout correctly" time="0.021">
+    <testcase classname="User Workflow Integration Tests Navigation and State Persistence handles logout correctly" name="User Workflow Integration Tests Navigation and State Persistence handles logout correctly" time="0.012">
     </testcase>
-    <testcase classname="User Workflow Integration Tests Error Handling handles localStorage errors gracefully" name="User Workflow Integration Tests Error Handling handles localStorage errors gracefully" time="0.003">
+    <testcase classname="User Workflow Integration Tests Error Handling handles localStorage errors gracefully" name="User Workflow Integration Tests Error Handling handles localStorage errors gracefully" time="0.002">
     </testcase>
     <testcase classname="User Workflow Integration Tests Error Handling handles invalid JSON in localStorage" name="User Workflow Integration Tests Error Handling handles invalid JSON in localStorage" time="0.001">
     </testcase>
