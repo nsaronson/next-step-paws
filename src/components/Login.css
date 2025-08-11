@@ -1,0 +1,125 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f3f0ff 0%, #e8e0ff 50%, #d5c6ff 100%);
+  padding: 20px;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 25px;
+  padding: 40px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
+  border: 3px solid #c8b5ff;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-header h2 {
+  color: #6b46c1;
+  margin: 0 0 10px 0;
+  font-size: 2em;
+}
+
+.login-header p {
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+.login-type-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.type-btn {
+  flex: 1;
+  background: rgba(200, 181, 255, 0.3);
+  border: 2px solid #c8b5ff;
+  color: #6b46c1;
+  padding: 12px;
+  border-radius: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.type-btn:hover {
+  background: rgba(200, 181, 255, 0.5);
+  border-color: #8b5cf6;
+}
+
+.type-btn.active {
+  background: linear-gradient(45deg, #8b5cf6, #a78bfa);
+  color: white;
+  border-color: #6b46c1;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-form input {
+  padding: 15px;
+  border: 2px solid #c8b5ff;
+  border-radius: 15px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+
+.login-btn {
+  padding: 18px;
+  font-size: 18px;
+  border-radius: 25px;
+  margin-top: 10px;
+}
+
+.signup-toggle {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #8b5cf6;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.link-btn:hover {
+  color: #6b46c1;
+}
+
+.owner-demo-info {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.owner-demo-info small {
+  color: #999;
+  background: rgba(200, 181, 255, 0.2);
+  padding: 8px 12px;
+  border-radius: 10px;
+  display: inline-block;
+}

@@ -1,0 +1,179 @@
+.group-classes {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.enrollment-form {
+  background: rgba(248, 187, 217, 0.3);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  border: 2px solid #f8bbd9;
+}
+
+.enrollment-form h3 {
+  color: #ad1457;
+  margin-top: 0;
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.form-row input {
+  flex: 1;
+  max-width: 200px;
+}
+
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.class-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 25px;
+  border: 3px solid #f8bbd9;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.15);
+}
+
+.class-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(233, 30, 99, 0.25);
+  border-color: #e91e63;
+}
+
+.class-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.class-header h3 {
+  color: #ad1457;
+  margin: 0;
+  font-size: 1.4em;
+}
+
+.level-badge {
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.class-description {
+  color: #666;
+  font-style: italic;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.class-details {
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.detail-item strong {
+  color: #ad1457;
+}
+
+.available {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.full {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.enroll-btn {
+  width: 100%;
+  font-size: 18px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.enrolled-list {
+  background: rgba(248, 187, 217, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #f8bbd9;
+}
+
+.enrolled-list strong {
+  color: #ad1457;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.enrolled-list ul,
+.waitlist ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.enrolled-list li,
+.waitlist li {
+  color: #666;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cancel-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #d32f2f;
+}
+
+.waitlist {
+  background: rgba(255, 193, 7, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ffc107;
+  margin-top: 15px;
+}
+
+.waitlist strong {
+  color: #f57c00;
+  display: block;
+  margin-bottom: 8px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
