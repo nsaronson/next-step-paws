@@ -194,7 +194,7 @@ const GroupClasses: React.FC = () => {
                 {cls.spots === 0 ? 'Join Waitlist 📝' : 'Enroll Now! 💖'}
               </button>
 
-              {cls.enrolled.length > 0 && (
+              {cls.enrolled && cls.enrolled.length > 0 && (
                 <div className="enrolled-list">
                   <strong>Enrolled Students:</strong>
                   <ul>

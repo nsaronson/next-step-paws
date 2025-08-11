@@ -10,9 +10,10 @@ import TimeWindowPicker from './components/TimeWindowPicker';
 import WaiverAndPolicies from './components/WaiverAndPolicies';
 import DogIntakeForm from './components/DogIntakeForm';
 import LessonNotes from './components/LessonNotes';
+import UserProfile from './components/UserProfile';
 import { User, AvailableSlot } from './types/auth';
 
-type View = 'classes' | 'private' | 'dashboard' | 'contact' | 'availability' | 'notes';
+type View = 'classes' | 'private' | 'dashboard' | 'contact' | 'availability' | 'notes' | 'profile';
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('classes');
@@ -20,9 +21,14 @@ function App() {
 
   useEffect(() => {
     // Check for saved user session
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    try {
+      const savedUser = localStorage.getItem('currentUser');
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
+    } catch (error) {
+      console.warn('Failed to load user session:', error);
+      localStorage.removeItem('currentUser');
     }
   }, []);
 
@@ -78,11 +84,19 @@ function App() {
       <div className="user-header">
         <div className="user-info">
           <span>Welcome, {user.name}! ({user.role})</span>
-          {user.dogName && <span>🐩 {user.dogName}</span>}
+          {user.dogName && <span>{user.dogName}</span>}
         </div>
-        <button onClick={handleLogout} className="btn logout-btn">
-          Logout
-        </button>
+        <div className="user-actions">
+          <button 
+            onClick={() => setCurrentView('profile')} 
+            className="btn profile-btn"
+          >
+            Profile
+          </button>
+          <button onClick={handleLogout} className="btn logout-btn">
+            Logout
+          </button>
+        </div>
       </div>
 
       <nav className="main-nav">
@@ -90,19 +104,19 @@ function App() {
           className={`nav-btn ${currentView === 'classes' ? 'active' : ''}`}
           onClick={() => setCurrentView('classes')}
         >
-          🐕 Group Classes
+          Group Classes
         </button>
         <button 
           className={`nav-btn ${currentView === 'private' ? 'active' : ''}`}
           onClick={() => setCurrentView('private')}
         >
-          📅 Private Lessons
+          Private Lessons
         </button>
         <button 
           className={`nav-btn ${currentView === 'contact' ? 'active' : ''}`}
           onClick={() => setCurrentView('contact')}
         >
-          📞 Contact Us
+          Contact Us
         </button>
         {user.role === 'owner' && (
           <>
@@ -110,19 +124,19 @@ function App() {
               className={`nav-btn ${currentView === 'availability' ? 'active' : ''}`}
               onClick={() => setCurrentView('availability')}
             >
-              ⏰ Set Availability
+              Set Availability
             </button>
             <button 
               className={`nav-btn ${currentView === 'notes' ? 'active' : ''}`}
               onClick={() => setCurrentView('notes')}
             >
-              📝 Lesson Notes
+              Lesson Notes
             </button>
             <button 
               className={`nav-btn ${currentView === 'dashboard' ? 'active' : ''}`}
               onClick={() => setCurrentView('dashboard')}
             >
-              📊 Dashboard
+              Dashboard
             </button>
           </>
         )}
@@ -136,6 +150,7 @@ function App() {
           <TimeWindowPicker onSaveTimeWindows={handleSaveTimeWindows} />
         )}
         {currentView === 'notes' && user.role === 'owner' && <LessonNotes user={user} />}
+        {currentView === 'profile' && <UserProfile user={user} onUpdate={setUser} />}
         {currentView === 'dashboard' && user.role === 'owner' && <OwnerDashboard />}
       </main>
     </div>

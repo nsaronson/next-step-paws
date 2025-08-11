@@ -108,6 +108,23 @@
   transform: translateY(-1px);
 }
 
+.google-calendar-btn {
+  background: linear-gradient(45deg, #ea4335, #4285f4);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.google-calendar-btn:hover {
+  background: linear-gradient(45deg, #d73627, #3367d6);
+  transform: translateY(-1px);
+}
+
 .schedule-content {
   padding: 20px 0;
 }
@@ -400,7 +417,8 @@
   }
 
   .print-btn,
-  .export-btn {
+  .export-btn,
+  .google-calendar-btn {
     width: 100%;
     padding: 10px 16px;
   }

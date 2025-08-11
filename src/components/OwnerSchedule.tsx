@@ -121,6 +121,50 @@ const OwnerSchedule: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
+  const exportToGoogleCalendar = () => {
+    const appointments = allAppointments;
+    
+    if (appointments.length === 0) {
+      alert('No appointments to export for this date.');
+      return;
+    }
+
+    // For multiple appointments, we'll create a batch URL or open them sequentially
+    if (appointments.length === 1) {
+      const appointment = appointments[0];
+      const googleCalendarUrl = createGoogleCalendarUrl(appointment);
+      window.open(googleCalendarUrl, '_blank');
+    } else {
+      // For multiple appointments, offer to export them one by one
+      const proceed = confirm(`You have ${appointments.length} appointments on this date. Would you like to add them all to Google Calendar? (Each will open in a new tab)`);
+      if (proceed) {
+        appointments.forEach((appointment, index) => {
+          setTimeout(() => {
+            const googleCalendarUrl = createGoogleCalendarUrl(appointment);
+            window.open(googleCalendarUrl, '_blank');
+          }, index * 1000); // Stagger the opening by 1 second to avoid popup blocking
+        });
+      }
+    }
+  };
+
+  const createGoogleCalendarUrl = (appointment: any) => {
+    const startDateTime = new Date(`${selectedDate}T${convertTo24Hour(appointment.time)}`);
+    const endDateTime = new Date(startDateTime.getTime() + (appointment.duration * 60000));
+    
+    const formatGoogleDateTime = (date: Date) => {
+      return date.toISOString().replace(/[-:.]/g, '').replace(/000Z$/, 'Z');
+    };
+
+    const title = encodeURIComponent(appointment.title);
+    const description = encodeURIComponent(`Client: ${appointment.client}${appointment.notes ? '\nNotes: ' + appointment.notes : ''}`);
+    const location = encodeURIComponent('Next Step Paws Training Facility');
+    const startTime = formatGoogleDateTime(startDateTime);
+    const endTime = formatGoogleDateTime(endDateTime);
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${description}&location=${location}`;
+  };
+
   const convertTo24Hour = (time12h: string) => {
     const [time, modifier] = time12h.split(' ');
     let [hours, minutes] = time.split(':');
@@ -179,7 +223,10 @@ const OwnerSchedule: React.FC = () => {
                 🖨️ Print
               </button>
               <button onClick={generateCalendarExport} className="btn export-btn">
-                📅 Export Calendar
+                📅 Export ICS
+              </button>
+              <button onClick={exportToGoogleCalendar} className="btn google-calendar-btn">
+                📅 Add to Google Calendar
               </button>
             </div>
           </div>

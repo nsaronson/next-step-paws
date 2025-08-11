@@ -19,21 +19,35 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     
     if (loginType === 'owner') {
       // Simple owner authentication (in real app, this would be secure)
-      if (email === 'owner@poodletraining.com' && password === 'poodle123') {
+      if (email === 'owner@nextsteppaws.com' && password === 'paws123') {
         onLogin({
           id: 'owner-1',
           email: email,
-          name: 'Poodle Perfect Owner',
-          role: 'owner'
+          name: 'Next Step Paws Owner',
+          role: 'owner',
+          password: password
         });
       } else {
-        alert('Invalid owner credentials. Use: owner@poodletraining.com / poodle123');
+        alert('Invalid owner credentials. Use: owner@nextsteppaws.com / paws123');
       }
     } else {
       // Customer login/signup
       if (isSignUp) {
-        if (!name || !email || !dogName) {
+        if (!name || !email || !dogName || !password) {
           alert('Please fill in all fields for signup!');
+          return;
+        }
+
+        if (password.length < 6) {
+          alert('Password must be at least 6 characters long!');
+          return;
+        }
+        
+        // Check if customer already exists
+        const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+        const existingCustomer = customers.find((c: User) => c.email === email);
+        if (existingCustomer) {
+          alert('An account with this email already exists. Please sign in instead.');
           return;
         }
         
@@ -43,19 +57,19 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           email,
           name,
           role: 'customer',
-          dogName
+          dogName,
+          password
         };
         
         // Save to localStorage (in real app, this would be a proper backend)
-        const customers = JSON.parse(localStorage.getItem('customers') || '[]');
         customers.push(newUser);
         localStorage.setItem('customers', JSON.stringify(customers));
         
         onLogin(newUser);
       } else {
         // Customer login
-        if (!email) {
-          alert('Please enter your email!');
+        if (!email || !password) {
+          alert('Please enter your email and password!');
           return;
         }
         
@@ -63,7 +77,11 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         const customer = customers.find((c: User) => c.email === email);
         
         if (customer) {
-          onLogin(customer);
+          if (customer.password === password) {
+            onLogin(customer);
+          } else {
+            alert('Incorrect password. Please try again.');
+          }
         } else {
           alert('Customer not found. Please sign up first!');
           setIsSignUp(true);
@@ -76,7 +94,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h2>🐕 Welcome to Next Step Paws! 🐕</h2>
+          <h2>Welcome to Next Step Paws</h2>
           <p>Please sign in to access your account</p>
         </div>
 
@@ -125,15 +143,13 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             required
           />
           
-          {loginType === 'owner' && (
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          )}
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
           <button type="submit" className="btn login-btn">
             {loginType === 'owner' 
@@ -166,7 +182,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
           {loginType === 'owner' && (
             <div className="owner-demo-info">
-              <small>Demo credentials: owner@poodletraining.com / poodle123</small>
+              <small>Demo credentials: owner@nextsteppaws.com / paws123</small>
             </div>
           )}
         </form>

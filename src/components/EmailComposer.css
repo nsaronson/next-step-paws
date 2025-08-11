@@ -1,0 +1,247 @@
+.email-composer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.email-composer {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.email-composer-header {
+  background: linear-gradient(135deg, #b19cd9 0%, #c9a9dd 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.email-composer-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.email-composer-content {
+  padding: 20px;
+}
+
+.recipient-info {
+  margin-bottom: 20px;
+}
+
+.booking-summary {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.booking-summary h4 {
+  margin: 0 0 10px 0;
+  color: #6f42c1;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.booking-summary p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.template-section {
+  margin-bottom: 20px;
+}
+
+.template-section label {
+  display: block;
+  margin-bottom: 8px;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.template-select {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.template-select:focus {
+  outline: none;
+  border-color: #b19cd9;
+}
+
+.custom-data-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-left: 4px solid #b19cd9;
+}
+
+.custom-data-section h4 {
+  margin: 0 0 15px 0;
+  color: #6f42c1;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #495057;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.subject-input,
+.message-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.subject-input:focus,
+.message-textarea:focus {
+  outline: none;
+  border-color: #b19cd9;
+}
+
+.subject-input {
+  font-weight: 500;
+}
+
+.message-textarea {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  line-height: 1.5;
+  min-height: 300px;
+}
+
+.email-composer-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e9ecef;
+}
+
+.email-composer-actions .btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.send-btn {
+  background: linear-gradient(135deg, #b19cd9 0%, #c9a9dd 100%);
+  color: white;
+}
+
+.send-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a08bc8 0%, #b899cc 100%);
+  transform: translateY(-1px);
+}
+
+.send-btn:disabled,
+.cancel-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .email-composer-overlay {
+    padding: 10px;
+  }
+  
+  .email-composer {
+    max-height: 95vh;
+  }
+  
+  .email-composer-header {
+    padding: 15px;
+  }
+  
+  .email-composer-content {
+    padding: 15px;
+  }
+  
+  .email-composer-actions {
+    flex-direction: column;
+  }
+  
+  .email-composer-actions .btn {
+    width: 100%;
+  }
+}

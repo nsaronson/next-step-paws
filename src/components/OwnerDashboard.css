@@ -510,6 +510,22 @@
   justify-content: flex-end;
 }
 
+.email-btn {
+  background: linear-gradient(135deg, #b19cd9 0%, #c9a9dd 100%);
+  color: white;
+  font-size: 0.9em;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.email-btn:hover {
+  background: linear-gradient(135deg, #a08bc8 0%, #b899cc 100%);
+  transform: translateY(-1px);
+}
+
 .cancel-btn {
   background: #f44336;
   font-size: 0.9em;

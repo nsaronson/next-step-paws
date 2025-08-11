@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { AvailableSlot, Booking } from '../types/auth';
+import { AvailableSlot, Booking, User } from '../types/auth';
+import EmailComposer from './EmailComposer';
 import './OwnerDashboard.css';
 
 const OwnerDashboard: React.FC = () => {
@@ -9,6 +10,9 @@ const OwnerDashboard: React.FC = () => {
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
   const [currentView, setCurrentView] = useState<'slots' | 'bookings' | 'classes' | 'manage-classes'>('slots');
+  const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false);
+  const [selectedBookingForEmail, setSelectedBookingForEmail] = useState<Booking | null>(null);
+  const [customers, setCustomers] = useState<User[]>([]);
 
   const timeSlots = [
     '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
@@ -28,6 +32,11 @@ const OwnerDashboard: React.FC = () => {
     const savedBookings = localStorage.getItem('bookings');
     if (savedBookings) {
       setBookings(JSON.parse(savedBookings));
+    }
+
+    const savedCustomers = localStorage.getItem('customers');
+    if (savedCustomers) {
+      setCustomers(JSON.parse(savedCustomers));
     }
   };
 
@@ -167,6 +176,25 @@ const OwnerDashboard: React.FC = () => {
   const getGroupClasses = () => {
     const savedClasses = localStorage.getItem('groupClasses');
     return savedClasses ? JSON.parse(savedClasses) : [];
+  };
+
+  const handleSendEmail = (booking: Booking) => {
+    setSelectedBookingForEmail(booking);
+    setShowEmailComposer(true);
+  };
+
+  const handleEmailSent = () => {
+    // Refresh data if needed
+    loadData();
+  };
+
+  const handleCloseEmailComposer = () => {
+    setShowEmailComposer(false);
+    setSelectedBookingForEmail(null);
+  };
+
+  const getCustomerByEmail = (email: string): User | null => {
+    return customers.find(customer => customer.email === email) || null;
   };
 
   const groupClasses = getGroupClasses();
@@ -384,6 +412,13 @@ const OwnerDashboard: React.FC = () => {
                     </div>
                     <div className="booking-actions">
                       <button 
+                        onClick={() => handleSendEmail(booking)}
+                        className="btn email-btn"
+                        title="Send email to customer"
+                      >
+                        📧 Send Email
+                      </button>
+                      <button 
                         onClick={() => cancelBooking(booking.id)}
                         className="btn cancel-btn"
                       >
@@ -446,7 +481,7 @@ const OwnerDashboard: React.FC = () => {
                     maxSpots: parseInt(formData.get('maxSpots') as string),
                     spots: parseInt(formData.get('maxSpots') as string),
                     price: parseInt(formData.get('price') as string),
-                    level: formData.get('level') as 'Beginner' | 'Intermediate' | 'Advanced',
+                    level: formData.get('level') as 'Introductory skills' | 'Puppy' | 'Ongoing skills',
                     enrolled: []
                   };
                   
@@ -460,9 +495,9 @@ const OwnerDashboard: React.FC = () => {
                     <input name="name" placeholder="Class Name" required />
                     <select name="level" required>
                       <option value="">Select Level</option>
-                      <option value="Beginner">Beginner</option>
-                      <option value="Intermediate">Intermediate</option>
-                      <option value="Advanced">Advanced</option>
+                      <option value="Introductory skills">Introductory skills</option>
+                      <option value="Puppy">Puppy</option>
+                      <option value="Ongoing skills">Ongoing skills</option>
                     </select>
                   </div>
                   <div className="form-row">
@@ -514,6 +549,22 @@ const OwnerDashboard: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Email Composer Modal */}
+      {showEmailComposer && selectedBookingForEmail && (
+        <EmailComposer
+          booking={selectedBookingForEmail}
+          customer={getCustomerByEmail(selectedBookingForEmail.customerEmail) || {
+            id: 'unknown',
+            email: selectedBookingForEmail.customerEmail,
+            name: selectedBookingForEmail.customerName,
+            role: 'customer',
+            dogName: selectedBookingForEmail.dogName
+          }}
+          onClose={handleCloseEmailComposer}
+          onEmailSent={handleEmailSent}
+        />
       )}
     </div>
   );

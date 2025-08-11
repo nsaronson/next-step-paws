@@ -4,6 +4,7 @@ export interface User {
   name: string;
   role: 'owner' | 'customer';
   dogName?: string; // For customers
+  password?: string; // For authentication
   waiverSigned?: boolean;
   policiesAccepted?: boolean;
   intakeFormCompleted?: boolean;

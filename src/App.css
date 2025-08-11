@@ -27,6 +27,16 @@
     gap: 10px;
     padding: 10px;
   }
+
+  .user-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .profile-btn,
+  .logout-btn {
+    width: 100%;
+  }
 }
 
 .user-info {
@@ -35,6 +45,23 @@
   gap: 15px;
   color: #6b46c1;
   font-weight: bold;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.profile-btn {
+  background: #6b7280;
+  color: white;
+  font-size: 14px;
+  padding: 8px 16px;
+}
+
+.profile-btn:hover {
+  background: #4b5563;
 }
 
 .logout-btn {
